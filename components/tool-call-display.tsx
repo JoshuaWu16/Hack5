@@ -92,14 +92,14 @@ export function ToolCallDisplay({ toolName, state, args, result }: ToolCallDispl
           {isDone && (expanded ? <ChevronDown className="w-4 h-4 text-muted-foreground" /> : <ChevronRight className="w-4 h-4 text-muted-foreground" />)}
         </div>
       </button>
-      {expanded && isDone && result && (
+      {expanded && isDone && result != null ? (
         <div className="border-t border-border px-4 py-3 max-h-64 overflow-y-auto">
           <pre className="text-xs font-mono text-muted-foreground whitespace-pre-wrap break-words">
             {JSON.stringify(result, null, 2).slice(0, 3000)}
             {JSON.stringify(result, null, 2).length > 3000 ? '\n... (truncated)' : ''}
           </pre>
         </div>
-      )}
+      ) : null}
     </div>
   )
 }
