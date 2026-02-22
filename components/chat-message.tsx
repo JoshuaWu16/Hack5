@@ -40,14 +40,15 @@ export function ChatMessage({ message }: ChatMessageProps) {
               </div>
             )
           }
-          if (part.type === 'tool-invocation') {
+          if (part.type.startsWith('tool-')) {
+            const toolPart = part as { type: string; toolCallId: string; toolName?: string; state: string; input?: unknown; output?: unknown }
             return (
               <ToolCallDisplay
                 key={index}
-                toolName={part.toolInvocation.toolName}
-                state={part.state}
-                args={part.toolInvocation.input as Record<string, unknown>}
-                result={part.state === 'output-available' ? part.toolInvocation.output : undefined}
+                toolName={toolPart.toolName ?? 'unknown'}
+                state={toolPart.state}
+                args={(toolPart.input as Record<string, unknown>) ?? {}}
+                result={toolPart.state === 'output-available' ? toolPart.output : undefined}
               />
             )
           }
