@@ -1,4 +1,4 @@
-import { anthropic } from '@ai-sdk/anthropic';
+import { google } from '@ai-sdk/google';
 import { streamText } from 'ai';
 import { tools } from '@/lib/tools';
 
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
 
     const result = await streamText({
         // @ts-expect-error - version mismatch with AI SDK core types
-        model: anthropic('claude-3-5-sonnet-latest'),
+        model: google('gemini-2.5-flash'),
         system: SYSTEM_PROMPT,
         messages,
         tools: tools as any, // Cast as any to bypass strict type checking for the loop control settings
