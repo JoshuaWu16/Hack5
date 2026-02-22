@@ -54,8 +54,8 @@ export default function Home() {
                   >
                     <div
                       className={`max-w-[85%] rounded-2xl px-5 py-3.5 shadow-sm ${message.role === 'user'
-                          ? 'bg-zinc-900 text-zinc-50 rounded-br-none'
-                          : 'bg-zinc-100 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800 rounded-bl-none'
+                        ? 'bg-zinc-900 text-zinc-50 rounded-br-none'
+                        : 'bg-zinc-100 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800 rounded-bl-none'
                         }`}
                     >
                       {message.content && (
@@ -119,7 +119,7 @@ export default function Home() {
               <Button
                 type="submit"
                 size="icon"
-                disabled={isLoading || !input.trim()}
+                disabled={isLoading || !input?.trim()}
                 className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-white shadow-sm transition-all disabled:opacity-50"
               >
                 <SendHorizontal className="w-5 h-5" />
