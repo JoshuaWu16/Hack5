@@ -1,4 +1,4 @@
-import { openai } from '@ai-sdk/openai';
+import { anthropic } from '@ai-sdk/anthropic';
 import { streamText } from 'ai';
 import { tools } from '@/lib/tools';
 
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
 
     const result = streamText({
         // @ts-expect-error - version mismatch with AI SDK core types
-        model: openai('gpt-4o'),
+        model: anthropic('claude-3-5-sonnet-latest'),
         system: SYSTEM_PROMPT,
         messages,
         tools: tools as any, // Cast as any to bypass strict type checking for the loop control settings
