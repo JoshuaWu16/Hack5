@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  serverExternalPackages: ['csv-parse'],
+  outputFileTracingIncludes: {
+    '/api/chat': ['./hvac_construction_dataset/**/*'],
+  },
 }
 
 export default nextConfig

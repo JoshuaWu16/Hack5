@@ -52,7 +52,9 @@ const SYSTEM_PROMPT = `You are an expert HVAC construction financial analyst AI 
 - PRJ-2024-005: Harbor View Condominiums - 3 Buildings ($13.7M)`
 
 export async function POST(req: Request) {
+  try {
   const { messages } = await req.json()
+  console.log("[v0] Received messages:", messages.length)
 
   const result = streamText({
     model: 'anthropic/claude-sonnet-4',
@@ -129,4 +131,11 @@ export async function POST(req: Request) {
   })
 
   return result.toUIMessageStreamResponse()
+  } catch (error) {
+    console.error("[v0] API route error:", error)
+    return new Response(JSON.stringify({ error: String(error) }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  }
 }

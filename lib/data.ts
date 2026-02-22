@@ -1,17 +1,73 @@
-import { readFileSync } from 'fs'
+import { readFileSync, existsSync } from 'fs'
 import { join } from 'path'
-import { parse } from 'csv-parse/sync'
 
 const DATA_DIR = join(process.cwd(), 'hvac_construction_dataset')
 
+function parseCSV(content: string): Record<string, string | number | boolean>[] {
+  const lines = content.split('\n').filter((line) => line.trim() !== '')
+  if (lines.length === 0) return []
+
+  const headers = parseCSVLine(lines[0])
+  const rows: Record<string, string | number | boolean>[] = []
+
+  for (let i = 1; i < lines.length; i++) {
+    const values = parseCSVLine(lines[i])
+    const row: Record<string, string | number | boolean> = {}
+    headers.forEach((header, j) => {
+      const val = values[j] ?? ''
+      // Try to cast numbers
+      if (val !== '' && !isNaN(Number(val))) {
+        row[header] = Number(val)
+      } else if (val === 'true' || val === 'True') {
+        row[header] = true
+      } else if (val === 'false' || val === 'False') {
+        row[header] = false
+      } else {
+        row[header] = val
+      }
+    })
+    rows.push(row)
+  }
+  return rows
+}
+
+function parseCSVLine(line: string): string[] {
+  const result: string[] = []
+  let current = ''
+  let inQuotes = false
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i]
+    if (char === '"') {
+      if (inQuotes && i + 1 < line.length && line[i + 1] === '"') {
+        current += '"'
+        i++
+      } else {
+        inQuotes = !inQuotes
+      }
+    } else if (char === ',' && !inQuotes) {
+      result.push(current.trim())
+      current = ''
+    } else {
+      current += char
+    }
+  }
+  result.push(current.trim())
+  return result
+}
+
 function loadCSV<T>(filename: string): T[] {
-  const content = readFileSync(join(DATA_DIR, filename), 'utf-8')
-  return parse(content, {
-    columns: true,
-    skip_empty_lines: true,
-    cast: true,
-    cast_date: false,
-  }) as T[]
+  const filePath = join(DATA_DIR, filename)
+  console.log("[v0] Loading CSV:", filePath, "exists:", existsSync(filePath))
+  try {
+    const content = readFileSync(filePath, 'utf-8')
+    const rows = parseCSV(content) as T[]
+    console.log("[v0] Loaded", rows.length, "rows from", filename)
+    return rows
+  } catch (error) {
+    console.error("[v0] Error loading CSV:", filename, error)
+    return []
+  }
 }
 
 export interface Contract {
