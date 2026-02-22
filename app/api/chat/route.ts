@@ -17,7 +17,6 @@ export async function POST(req: Request) {
     const { messages } = await req.json();
 
     const result = await streamText({
-        // @ts-expect-error - version mismatch with AI SDK core types
         model: google('gemini-2.5-flash'),
         system: SYSTEM_PROMPT,
         messages,

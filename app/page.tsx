@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useChat } from '@ai-sdk/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -9,10 +10,24 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { SendHorizontal, Loader2, Wrench } from 'lucide-react';
 
 export default function Home() {
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+  const [input, setInput] = useState('');
+  const { messages, sendMessage, status } = useChat({
     // @ts-ignore
     maxSteps: 5,
   } as any);
+
+  const isLoading = status !== 'ready';
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!input?.trim()) return;
+    sendMessage({ role: 'user', parts: [{ type: 'text', text: input }] });
+    setInput('');
+  };
 
   return (
     <div className="flex flex-col h-screen max-w-5xl mx-auto p-4 md:p-8 bg-zinc-50 dark:bg-zinc-950">
