@@ -48,7 +48,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
                 toolName={toolPart.toolName ?? 'unknown'}
                 state={toolPart.state}
                 args={(toolPart.input as Record<string, unknown>) ?? {}}
-                result={toolPart.state === 'output-available' ? toolPart.output : undefined}
+                result={toolPart.state === 'output-available' ? (toolPart.output as Record<string, unknown>) : undefined}
               />
             )
           }

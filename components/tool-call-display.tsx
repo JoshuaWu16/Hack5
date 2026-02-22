@@ -51,7 +51,7 @@ interface ToolCallDisplayProps {
   toolName: string
   state: string
   args: Record<string, unknown>
-  result?: unknown
+  result?: Record<string, unknown> | string | number | boolean | null
 }
 
 export function ToolCallDisplay({ toolName, state, args, result }: ToolCallDisplayProps) {
