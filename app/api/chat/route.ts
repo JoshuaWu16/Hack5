@@ -16,7 +16,7 @@ CORE DIRECTIVE (The "Granola" Protocol):
 export async function POST(req: Request) {
     const { messages } = await req.json();
 
-    const result = streamText({
+    const result = await streamText({
         // @ts-expect-error - version mismatch with AI SDK core types
         model: anthropic('claude-3-5-sonnet-latest'),
         system: SYSTEM_PROMPT,
